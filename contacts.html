@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Связаться — Neo Vape</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #f0f2f5;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .contact-item {
+            margin: 15px 0;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #0088cc;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .contact-item:hover {
+            background: #e9ecef;
+        }
+        .icon {
+            font-size: 20px;
+        }
+        .back-link {
+            margin-top: 25px;
+            display: inline-block;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📞 Свяжитесь с нами</h1>
+        <p>Напишите нам в Telegram — мы ответим и оформим ваш заказ!</p>
+
+        <a href="https://t.me/Artemchik2346" class="contact-item" target="_blank">
+            <span class="icon">💬</span> @Artemchik2346
+        </a>
+        <a href="https://t.me/serzh_200" class="contact-item" target="_blank">
+            <span class="icon">💬</span> @serzh_200
+        </a>
+
+        <a href="index.html" class="back-link">← Вернуться в магазин</a>
+    </div>
+</body>
+</html>

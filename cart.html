@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - Neo Vape</title>
+    <meta name="description" content="Ваша корзина в магазине Neo Vape. Оформите заказ и получите товар с доставкой.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <img src="Logotip.jpg" alt="Neo Vape" class="logo" onerror="this.src='https://i.imgur.com/5VxY7bK.png'">
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Искать товары...">
+        <button id="searchBtn">🔍</button>
+    </div>
+    <a href="cart.html" id="cartLink">🛒 Корзина (<span id="cartCount">0</span>)</a>
+</header>
+
+<main class="container">
+
+    <h2>Ваша корзина</h2>
+
+    <div id="cartItems">
+        <!-- Товары будут здесь -->
+    </div>
+
+    <div class="cart-total">
+        <strong>Итого:</strong> <span id="totalPrice">0.00 ₽</span>
+    </div>
+
+    <div class="cart-actions">
+        <a href="index.html" class="btn btn-secondary">Продолжить покупки</a>
+        <button id="clearCart" class="btn btn-danger">Очистить корзину</button>
+        <button id="checkout" class="btn btn-primary">Оформить заказ</button>
+    </div>
+
+</main>
+
+<script>
+    // ===== ГЛОБАЛЬНЫЕ ДАННЫЕ =====
+    let cart = JSON.parse(localStorage.getItem('smokeBobCart')) || [];
+
+    // ===== СОХРАНЕНИЕ =====
+    function saveCart() {
+        localStorage.setItem('smokeBobCart', JSON.stringify(cart));
+        updateCartCount();
+    }
+
+    // ===== СЧЁТЧИК КОРЗИНЫ =====
+    function updateCartCount() {
+        const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+        document.getElementById('cartCount').textContent = count;
+    }
+
+    // ===== ОТОБРАЖЕНИЕ КОРЗИНЫ =====
+    function renderCart() {
+        const container = document.getElementById('cartItems');
+        const totalEl = document.getElementById('totalPrice');
+        if (!container || !totalEl) return;
+
+        updateCartCount();
+
+        if (cart.length === 0) {
+            container.innerHTML = '<p>Ваша корзина пуста 😢</p>';
+            totalEl.textContent = '0.00 ₽';
+            return;
+        }
+
+        let total = 0;
+        let html = cart.map(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            return `
+                <div class="cart-item">
+                    <img src="${item.image}" class="cart-item-image">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-sku">Артикул: ${item.sku}</div>
+                        <div class="cart-item-description">${item.description}</div>
+                    </div>
+                    <div class="cart-item-price">${itemTotal.toFixed(2)} ₽</div>
+                    <div class="cart-item-controls">
+                        <input type="number" class="quantity-input" value="${item.quantity}" min="1" onchange="updateQuantity(${item.productId}, this.value)">
+                        <button class="remove-btn" onclick="removeItem(${item.productId})">×</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = html;
+        totalEl.textContent = `${total.toFixed(2)} ₽`;
+    }
+
+    // ===== УПРАВЛЕНИЕ КОРЗИНОЙ =====
+    function removeItem(productId) {
+        cart = cart.filter(item => item.productId !== productId);
+        saveCart();
+        renderCart();
+    }
+
+    function updateQuantity(productId, newQty) {
+        const item = cart.find(i => i.productId === productId);
+        if (item && newQty > 0) {
+            item.quantity = parseInt(newQty);
+            saveCart();
+            renderCart();
+        }
+    }
+
+    // ===== ОЧИСТИТЬ КОРЗИНУ =====
+    document.getElementById('clearCart')?.addEventListener('click', () => {
+        if (confirm('Очистить корзину?')) {
+            cart = [];
+            saveCart();
+            renderCart();
+        }
+    });
+
+    // ===== ОФОРМИТЬ ЗАКАЗ =====
+    document.getElementById('checkout')?.addEventListener('click', () => {
+        if (cart.length === 0) {
+            alert('Корзина пуста!');
+            return;
+        }
+        alert('🎉 Заказ оформлен!');
+        cart = [];
+        saveCart();
+        renderCart();
+        window.location.href = 'contacts.html';
+    });
+
+    // ===== ИНИЦИАЛИЗАЦИЯ =====
+    document.addEventListener('DOMContentLoaded', () => {
+        updateCartCount();
+        renderCart();
+    });
+</script>
+
+</body>
+</html>
